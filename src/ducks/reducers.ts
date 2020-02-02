@@ -1,9 +1,10 @@
 import authReducer from "./state/auth";
 import { combineReducers } from "redux";
-import { StateType } from "typesafe-actions";
+import { firebaseReducer, FirebaseReducer } from "react-redux-firebase";
 
 export const reducers = combineReducers({
   auth: authReducer,
+  firebase: firebaseReducer
 });
 
-export type RootState = StateType<typeof reducers>;
+export type RootState = ReturnType<typeof reducers>;
