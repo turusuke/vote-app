@@ -1,4 +1,4 @@
-import authReducer from "./auth";
+import authReducer from "./state/auth";
 import { combineReducers } from "redux";
 import { StateType } from "typesafe-actions";
 
