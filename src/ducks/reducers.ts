@@ -14,12 +14,20 @@ interface profileType {
   };
 }
 
+export interface User {
+    displayName: string
+    photoURL: string
+    uid: string
+}
+
 export interface Themes {
   id: string;
   title: string;
   like: string[];
   comment: string;
   createdtime: string;
+  anonymous: boolean;
+  user: User
 };
 
 export interface firestoreType {

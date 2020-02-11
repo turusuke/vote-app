@@ -20,7 +20,6 @@ export default function APP() {
   const firebase = useFirebase();
   return (
     <AuthIsLoaded>
-      <div className="App" />
       <button
         onClick={() =>
           firebase.login({

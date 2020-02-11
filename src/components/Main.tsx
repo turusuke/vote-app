@@ -1,7 +1,11 @@
 import React, { FormEvent } from "react";
 import { ThemeCard } from "./ThemeCard";
 import Form from "./Form";
-import { useFirestore, useFirestoreConnect } from "react-redux-firebase";
+import {
+  useFirestore,
+  useFirestoreConnect,
+  useFirebase
+} from "react-redux-firebase";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { RootState, Themes } from "../ducks/reducers";
@@ -9,14 +13,16 @@ import { RootState, Themes } from "../ducks/reducers";
 const onSubmit = (event: FormEvent) => {
   event.preventDefault();
   const inputs = event.currentTarget.querySelectorAll("[name]");
-  const submitValues =
-    ([...inputs] as any).reduce(
-      (prev: { [index: string]: string }, currentEl: HTMLFormElement) => {
-        prev[currentEl.name] = currentEl.value;
-        return prev;
-      },
-      {}
-    );
+  const submitValues = ([...inputs] as any).reduce(
+    (prev: { [index: string]: string }, currentEl: HTMLFormElement) => {
+      prev[currentEl.name] =
+        currentEl.name === "anonymous"
+          ? currentEl.value === "on"
+          : currentEl.value;
+      return prev;
+    },
+    {}
+  );
 
   submitValues.createdtime = new Date();
   submitValues.like = [];
@@ -24,33 +30,73 @@ const onSubmit = (event: FormEvent) => {
   return submitValues;
 };
 
+const onLike = ({
+  firestore,
+  id,
+  isLiked,
+  uid
+}: {
+  firestore: any;
+  id: string;
+  isLiked: boolean;
+  uid: string;
+}) => {
+  firestore
+    .collection("themes")
+    .doc(id)
+    .update({
+      like: isLiked
+        ? firestore.FieldValue.arrayRemove(uid)
+        : firestore.FieldValue.arrayUnion(uid)
+    });
+};
+
 const Main = () => {
+  const firebase = useFirebase();
   const firestore = useFirestore();
-  useFirestoreConnect([{ collection: "themes" }, { collection: "users" }]);
-  const [themes]  = useSelector(
+  useFirestoreConnect([{ collection: "themes" }]);
+  const themes = useSelector(
     ({
       firestore: {
         ordered: { themes }
       }
-    }: RootState) => [themes]
+    }: RootState) => {
+      return themes && themes.map((theme: Themes) => {
+        if (theme.anonymous) {
+          Object.assign(theme, {
+            user: {
+              displayName: null,
+              photoURL: null,
+              uid: null
+            }
+          });
+        }
+
+        return theme;
+      });
+    }
   );
-  const auth = useSelector(({ firebase: { auth, profile } }: RootState) => auth);
+
+  const auth = useSelector(
+    ({ firebase: { auth, profile } }: RootState) => auth
+  );
 
   if (!themes) return null;
 
   return (
     <main>
       <CardList>
-        {themes.map(({ id, title, like, comment }: Themes) => {
+        {themes.map(({ id, title, like, comment, user }: Themes) => {
+          const isLiked = like ? like.includes(auth.uid) : false;
           return (
             <ThemeCard
               key={id}
               id={id}
               title={title}
               likes={like ? like.length : 0}
-              isLiked={like ? like.includes(auth.uid) : false}
+              onLike={() => onLike({ firestore, isLiked, id, uid: auth.uid })}
               comment={comment}
-              uid={auth.uid}
+              user={user}
             />
           );
         })}
@@ -58,11 +104,23 @@ const Main = () => {
 
       <Form
         onSubmit={event => {
-          const result = onSubmit(event);
-          result.user = auth.uid;
-          firestore.collection("themes").add(result);
+          const themeData = onSubmit(event);
+          themeData.user = {
+            uid: auth.uid,
+            displayName: auth.displayName,
+            photoURL: auth.photoURL
+          };
+          firestore.collection("themes").add(themeData);
         }}
       />
+
+      <button
+        onClick={() => {
+          firebase.auth().signOut();
+        }}
+      >
+        ログアウト
+      </button>
     </main>
   );
 };

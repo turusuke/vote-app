@@ -20,6 +20,11 @@ const Form: FC<Props> = ({ onSubmit = () => {} }: Props) => {
           placeholder="コメントどぞ"
         />
       </label>
+
+      <label>
+        匿名で投稿
+        <input type="checkbox" name="anonymous"/>
+      </label>
       <button>お題を投稿する</button>
     </form>
   );
