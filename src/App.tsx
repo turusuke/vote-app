@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { useSelector } from "react-redux";
 import { isLoaded, isEmpty, useFirebase } from "react-redux-firebase";
-import "./App.css";
+import "ress";
 import { RootState } from "./ducks/reducers";
 import Main from "./components/Main";
 

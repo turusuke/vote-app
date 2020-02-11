@@ -17,7 +17,7 @@ const onSubmit = (event: FormEvent) => {
     (prev: { [index: string]: string }, currentEl: HTMLFormElement) => {
       prev[currentEl.name] =
         currentEl.name === "anonymous"
-          ? currentEl.value === "on"
+          ? currentEl.checked
           : currentEl.value;
       return prev;
     },
@@ -51,6 +51,14 @@ const onLike = ({
     });
 };
 
+const onDelete = ({ firestore, id }: { firestore: any; id: string }) => {
+  return firestore
+    .collection("themes")
+    .doc(id)
+    .delete()
+    .then(() => {});
+};
+
 const Main = () => {
   const firebase = useFirebase();
   const firestore = useFirestore();
@@ -61,19 +69,22 @@ const Main = () => {
         ordered: { themes }
       }
     }: RootState) => {
-      return themes && themes.map((theme: Themes) => {
-        if (theme.anonymous) {
-          Object.assign(theme, {
-            user: {
-              displayName: null,
-              photoURL: null,
-              uid: null
-            }
-          });
-        }
+      return (
+        themes &&
+        themes.map((theme: Themes) => {
+          if (theme.anonymous) {
+            Object.assign(theme, {
+              user: {
+                displayName: null,
+                photoURL: null,
+                uid: null
+              }
+            });
+          }
 
-        return theme;
-      });
+          return theme;
+        })
+      );
     }
   );
 
@@ -95,8 +106,10 @@ const Main = () => {
               title={title}
               likes={like ? like.length : 0}
               onLike={() => onLike({ firestore, isLiked, id, uid: auth.uid })}
+              onDelete={() => onDelete({ firestore, id })}
               comment={comment}
               user={user}
+              isMyTheme={user.uid === auth.uid}
             />
           );
         })}

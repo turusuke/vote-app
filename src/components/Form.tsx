@@ -10,7 +10,7 @@ const Form: FC<Props> = ({ onSubmit = () => {} }: Props) => {
     <form onSubmit={onSubmit}>
       <label>
         お題(必須):
-        <TextArea name="title" placeholder="お題どぞ" />
+        <TextArea name="title" required placeholder="お題どぞ" />
       </label>
 
       <label>

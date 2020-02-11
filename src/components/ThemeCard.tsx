@@ -7,8 +7,10 @@ interface Props {
   title: string;
   likes: number;
   onLike: () => void;
+  onDelete: () => Promise<void>;
   comment: string;
   user: User;
+  isMyTheme: boolean
 }
 
 export const ThemeCard: FC<Props> = ({
@@ -16,8 +18,10 @@ export const ThemeCard: FC<Props> = ({
   title,
   likes,
   onLike,
+  onDelete,
   comment,
-  user
+  user,
+  isMyTheme
 }) => {
   return (
     <Root>
@@ -38,7 +42,12 @@ export const ThemeCard: FC<Props> = ({
             )}
           </div>
         </div>
+
+        <div>
+          {isMyTheme && <button onClick={onDelete}>削除</button>}
+        </div>
       </div>
+
       <div>
         <p>{comment}</p>
       </div>
