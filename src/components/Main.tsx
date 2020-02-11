@@ -7,7 +7,8 @@ import {
   useFirebase
 } from "react-redux-firebase";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
+import Grid from "@material-ui/core/Grid";
+
 import { RootState, Themes } from "../ducks/reducers";
 
 const onSubmit = (event: FormEvent) => {
@@ -52,6 +53,7 @@ const onLike = ({
 };
 
 const onDelete = ({ firestore, id }: { firestore: any; id: string }) => {
+  // TODO: 確認挟む
   return firestore
     .collection("themes")
     .doc(id)
@@ -96,25 +98,26 @@ const Main = () => {
 
   return (
     <main>
-      <CardList>
-        {themes.map(({ id, title, like, comment, user }: Themes) => {
-          const isLiked = like ? like.includes(auth.uid) : false;
-          return (
-            <ThemeCard
-              key={id}
-              id={id}
-              title={title}
-              likes={like ? like.length : 0}
-              onLike={() => onLike({ firestore, isLiked, id, uid: auth.uid })}
-              onDelete={() => onDelete({ firestore, id })}
-              comment={comment}
-              user={user}
-              isMyTheme={user.uid === auth.uid}
-            />
-          );
-        })}
-      </CardList>
-
+      <Grid container spacing={3}>
+        <Grid item xs={6}>
+          {themes.map(({ id, title, like, comment, user }: Themes) => {
+            const isLiked = like ? like.includes(auth.uid) : false;
+            return (
+              <ThemeCard
+                key={id}
+                id={id}
+                title={title}
+                likes={like ? like.length : 0}
+                onLike={() => onLike({ firestore, isLiked, id, uid: auth.uid })}
+                onDelete={() => onDelete({ firestore, id })}
+                comment={comment}
+                user={user}
+                isMyTheme={user.uid === auth.uid}
+              />
+            );
+          })}
+        </Grid>
+      </Grid>
       <Form
         onSubmit={event => {
           const themeData = onSubmit(event);
@@ -140,11 +143,5 @@ const Main = () => {
     </main>
   );
 };
-
-const CardList = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 3fr);
-  grid-gap: 20px;
-`;
 
 export default Main;
