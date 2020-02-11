@@ -16,9 +16,9 @@ const onSubmit = (event: FormEvent) => {
   const submitValues = ([...inputs] as any).reduce(
     (prev: { [index: string]: string }, currentEl: HTMLFormElement) => {
       prev[currentEl.name] =
-        currentEl.name === "anonymous"
-          ? currentEl.checked
-          : currentEl.value;
+        currentEl.name === "anonymous" ? currentEl.checked : currentEl.value;
+
+      if (currentEl.name !== "anonymous") currentEl.value = "";
       return prev;
     },
     {}
@@ -129,7 +129,10 @@ const Main = () => {
 
       <button
         onClick={() => {
-          firebase.auth().signOut();
+          firebase
+            .auth()
+            .signOut()
+            .then(() => {});
         }}
       >
         ログアウト
