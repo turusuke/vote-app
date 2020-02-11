@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { isLoaded, isEmpty, useFirebase } from "react-redux-firebase";
 import "./App.css";
 import { RootState } from "./ducks/reducers";
+import Main from "./components/Main";
 
 const AuthIsLoaded: FC = ({ children }) => {
   const auth = useSelector(({ firebase }: RootState) => firebase.auth);
@@ -11,7 +12,7 @@ const AuthIsLoaded: FC = ({ children }) => {
   ) : isEmpty(auth) ? (
     <div>未ログインです。{children}</div>
   ) : (
-    <button>ログアウト</button>
+    <Main />
   );
 };
 
@@ -24,7 +25,7 @@ export default function APP() {
         onClick={() =>
           firebase.login({
             provider: "google",
-            type: "redirect",
+            type: "redirect"
           })
         }
       >
