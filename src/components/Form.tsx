@@ -1,31 +1,69 @@
 import React, { FC, FormEvent } from "react";
-import TextArea from "./TextArea";
+import {
+  TextField,
+  Checkbox,
+  FormControlLabel,
+  Button,
+  Typography,
+  createStyles,
+  makeStyles,
+  Theme
+} from "@material-ui/core";
+import Box from "@material-ui/core/Box";
 
 interface Props {
   onSubmit?: (event: FormEvent) => void;
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    box: {
+      margin: "2em 0 0",
+    }
+  })
+);
+
 const Form: FC<Props> = ({ onSubmit = () => {} }: Props) => {
+  const classes = useStyles();
   return (
     <form onSubmit={onSubmit}>
-      <label>
-        お題(必須):
-        <TextArea name="title" required placeholder="お題どぞ" />
-      </label>
-
-      <label>
-        コメント:
-        <TextArea
-          name="comment"
-          placeholder="コメントどぞ"
+      <Box className={classes.box}>
+        <TextField
+          required
+          name="title"
+          label="お題"
+          multiline
+          variant="outlined"
+          fullWidth
         />
-      </label>
+      </Box>
 
-      <label>
-        匿名で投稿
-        <input type="checkbox" name="anonymous"/>
-      </label>
-      <button>お題を投稿する</button>
+      <Box className={classes.box}>
+        <TextField
+          required
+          name="comment"
+          label="お題に対するコメント"
+          multiline
+          variant="outlined"
+          fullWidth
+        />
+      </Box>
+
+      <Box className={classes.box}>
+        <FormControlLabel
+          control={<Checkbox name="anonymous" />}
+          label="匿名で投稿する"
+        />
+        <Typography>
+          ※ 匿名の投稿は自分で削除できないので注意!!
+        </Typography>
+      </Box>
+
+      <Box className={classes.box}>
+        <Button type="submit" variant="contained" color="primary">
+          お題を投稿する
+        </Button>
+      </Box>
     </form>
   );
 };

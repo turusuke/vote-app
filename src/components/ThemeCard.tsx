@@ -1,21 +1,23 @@
-import styled from "styled-components";
 import React, { FC, useState } from "react";
 import clsx from "clsx";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import IconButton from "@material-ui/core/IconButton";
+import {
+  Avatar,
+  Box,
+  Badge,
+  Card,
+  CardActions,
+  IconButton,
+  CardContent,
+  Collapse,
+  Typography,
+  Tooltip
+} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
-import Badge from "@material-ui/core/Badge";
-import Typography from "@material-ui/core/Typography";
 import FavoriteIcon from "@material-ui/icons/Favorite";
-import Collapse from "@material-ui/core/Collapse";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import { User } from "../ducks/reducers";
-import Avatar from "@material-ui/core/Avatar";
-import { Box } from "@material-ui/core";
 
 interface Props {
   id: string;
@@ -31,11 +33,18 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      position: "relative",
+      position: "relative"
+    },
+    cardContent: {
+      paddingRight: "30px"
     },
     title: {},
+    comment: {
+      marginTop: "0.8em",
+      whiteSpace: "pre-line"
+    },
     expandWrap: {
-      position: 'absolute',
+      position: "absolute",
       top: 0,
       right: 0
     },
@@ -76,17 +85,13 @@ export const ThemeCard: FC<Props> = ({
   return (
     <Box className={classes.root}>
       <Card variant="outlined">
-        <CardContent>
-          <Typography
-            className={classes.title}
-            color="textSecondary"
-            gutterBottom
-          >
+        <CardContent className={classes.cardContent}>
+          <Typography className={classes.title} color="textSecondary">
             {title}
           </Typography>
 
           {comment.length > 0 && (
-            <Box>
+            <Box className={classes.comment}>
               <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <Typography>{comment}</Typography>
               </Collapse>
@@ -109,22 +114,29 @@ export const ThemeCard: FC<Props> = ({
       </Card>
 
       <Box className={classes.profile}>
-        <Avatar alt={user.displayName} src={user.photoURL} />
-        {/*<Typography>{user.displayName}</Typography>*/}
+        {user.displayName ? (
+          <Tooltip placement="top" arrow title={user.displayName} aria-label={user.displayName}>
+            <Avatar alt={user.displayName} src={user.photoURL} />
+          </Tooltip>
+        ) : (
+          <Avatar alt={user.displayName} src={user.photoURL} />
+        )}
       </Box>
 
-      {comment.length > 0 && <Box className={classes.expandWrap}>
-        <IconButton
-          className={clsx(classes.expand, {
-            [classes.expandOpen]: expanded
-          })}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="コメントを確認する"
-        >
-          <ExpandMoreIcon />
-        </IconButton>
-      </Box>}
+      {comment.length > 0 && (
+        <Box className={classes.expandWrap}>
+          <IconButton
+            className={clsx(classes.expand, {
+              [classes.expandOpen]: expanded
+            })}
+            onClick={handleExpandClick}
+            aria-expanded={expanded}
+            aria-label="コメントを確認する"
+          >
+            <ExpandMoreIcon />
+          </IconButton>
+        </Box>
+      )}
     </Box>
   );
 };
