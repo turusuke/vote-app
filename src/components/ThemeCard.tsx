@@ -14,17 +14,17 @@ import {
   Tooltip
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
-import FavoriteIcon from "@material-ui/icons/Favorite";
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import { User } from "../ducks/reducers";
 
 interface Props {
-  id: string;
   title: string;
   likes: number;
+  isLiked: boolean;
   onLike: () => void;
-  onDelete: () => Promise<void>;
+  onDelete: () => void;
   comment: string;
   user: User;
   isMyTheme: boolean;
@@ -37,6 +37,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     cardContent: {
       paddingRight: "30px"
+    },
+    cardActions: {
+      backgroundColor: "#f3f2f2"
     },
     title: {},
     comment: {
@@ -66,9 +69,9 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const ThemeCard: FC<Props> = ({
-  id,
   title,
   likes,
+  isLiked,
   onLike,
   onDelete,
   comment,
@@ -99,10 +102,14 @@ export const ThemeCard: FC<Props> = ({
           )}
         </CardContent>
 
-        <CardActions disableSpacing>
+        <CardActions className={classes.cardActions} disableSpacing>
           <IconButton onClick={onLike} aria-label="このテーマにいいねをする">
             <Badge badgeContent={likes}>
-              <FavoriteIcon />
+              <ThumbUpIcon
+                style={{
+                  color: isLiked ? "rgb(15, 117, 191)" : "currentColor"
+                }}
+              />
             </Badge>
           </IconButton>
           {isMyTheme && (
@@ -115,7 +122,12 @@ export const ThemeCard: FC<Props> = ({
 
       <Box className={classes.profile}>
         {user.displayName ? (
-          <Tooltip placement="top" arrow title={user.displayName} aria-label={user.displayName}>
+          <Tooltip
+            placement="top"
+            arrow
+            title={user.displayName}
+            aria-label={user.displayName}
+          >
             <Avatar alt={user.displayName} src={user.photoURL} />
           </Tooltip>
         ) : (

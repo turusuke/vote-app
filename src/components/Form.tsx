@@ -40,9 +40,8 @@ const Form: FC<Props> = ({ onSubmit = () => {} }: Props) => {
 
       <Box className={classes.box}>
         <TextField
-          required
           name="comment"
-          label="お題に対するコメント"
+          label="お題に対する想いがあればどうぞ"
           multiline
           variant="outlined"
           fullWidth
@@ -55,12 +54,12 @@ const Form: FC<Props> = ({ onSubmit = () => {} }: Props) => {
           label="匿名で投稿する"
         />
         <Typography>
-          ※ 匿名の投稿は自分で削除できないので注意!!
+          ※ 投稿者が非表示になります。<br />匿名の投稿は自分で削除できないので注意!!
         </Typography>
       </Box>
 
       <Box className={classes.box}>
-        <Button type="submit" variant="contained" color="primary">
+        <Button type="submit" data-submit-type={'post'} variant="contained" color="primary">
           お題を投稿する
         </Button>
       </Box>
