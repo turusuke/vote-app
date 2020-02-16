@@ -1,5 +1,9 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Site Status
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/12fe6bd2-d6dd-417b-87b6-4806ba4e78ca/deploy-status)](https://app.netlify.com/sites/practical-meninsky-b2c1b3/deploys)
+
 ## Available Scripts
 
 In the project directory, you can run:
