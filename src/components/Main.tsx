@@ -129,6 +129,10 @@ const Main = () => {
         >
           <Paper className={classes.formPaper} elevation={3}>
             <Form
+              handleCancel={() => {
+                setOpenModal(false);
+                setKeyPressed(false);
+              }}
               onSubmit={event => {
                 const themeData = onSubmit(event);
                 themeData.user = {
