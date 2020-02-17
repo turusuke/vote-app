@@ -17,7 +17,7 @@ import {
   Button
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import ThumbUpIcon from "@material-ui/icons/ThumbUp";
+import Star from "@material-ui/icons/Star";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 
 import { RootState, Themes } from "../ducks/reducers";
@@ -89,7 +89,7 @@ const Main = () => {
       <main>
         <Paper className={classes.headContent}>
           <Typography variant="body1">
-            <ThumbUpIcon /> でいいねを送れます。
+            <Star /> を押すとそのテーマにいいねを送れます。
           </Typography>
           <Typography variant="body1">
             右下の + ボタンか <kbd>⌘ + Return</kbd>で表示される入力フォームからトークテーマを投稿できます。
