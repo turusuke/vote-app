@@ -1,6 +1,11 @@
 import React, { FC, useState } from "react";
 import clsx from "clsx";
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import {
+  makeStyles,
+  createStyles,
+  Theme,
+  withStyles
+} from "@material-ui/core/styles";
 import {
   Avatar,
   Box,
@@ -14,7 +19,7 @@ import {
   Tooltip
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import Star from "@material-ui/icons/Star";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import { User } from "../ducks/reducers";
@@ -76,6 +81,19 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+const StyledBadge = withStyles((theme: Theme) =>
+  createStyles({
+    badge: {
+      top: "-2px",
+      right: "-4px",
+      border: "2px solid #fff",
+      padding: "0 4px",
+      backgroundColor: "#f18211",
+      color: "white"
+    }
+  })
+)(Badge);
+
 export const ThemeCard: FC<Props> = ({
   title,
   likes,
@@ -112,13 +130,13 @@ export const ThemeCard: FC<Props> = ({
 
         <CardActions className={classes.cardActions} disableSpacing>
           <IconButton onClick={onLike} aria-label="このテーマにいいねをする">
-            <Badge badgeContent={likes}>
-              <ThumbUpIcon
+            <StyledBadge badgeContent={likes}>
+              <Star
                 style={{
-                  color: isLiked ? "rgb(15, 117, 191)" : "currentColor"
+                  color: isLiked ? "#f18211" : "currentColor"
                 }}
               />
-            </Badge>
+            </StyledBadge>
           </IconButton>
           {isMyTheme && (
             <IconButton onClick={onDelete} aria-label="このテーマを削除する">
