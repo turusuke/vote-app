@@ -33,10 +33,18 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      position: "relative"
+      position: "relative",
+      display: "flex",
+      height: "100%"
+    },
+    card: {
+      display: "flex",
+      flexDirection: "column",
+      width: "100%"
     },
     cardContent: {
-      paddingRight: "30px"
+      paddingRight: "30px",
+      flexGrow: 1
     },
     cardActions: {
       backgroundColor: "#f3f2f2"
@@ -87,7 +95,7 @@ export const ThemeCard: FC<Props> = ({
 
   return (
     <Box className={classes.root}>
-      <Card variant="outlined">
+      <Card className={classes.card} variant="outlined">
         <CardContent className={classes.cardContent}>
           <Typography className={classes.title} color="textSecondary">
             {title}
