@@ -12,18 +12,26 @@ import {
 import Box from "@material-ui/core/Box";
 
 interface Props {
+  handleCancel: () => void;
   onSubmit?: (event: FormEvent) => void;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     box: {
+      margin: "2em 0 0"
+    },
+
+    buttons: {
+      maxWidth: "270px",
       margin: "2em 0 0",
+      display: "flex",
+      justifyContent: "space-between"
     }
   })
 );
 
-const Form: FC<Props> = ({ onSubmit = () => {} }: Props) => {
+const Form: FC<Props> = ({ onSubmit = () => {}, handleCancel }: Props) => {
   const classes = useStyles();
   return (
     <form onSubmit={onSubmit}>
@@ -54,12 +62,18 @@ const Form: FC<Props> = ({ onSubmit = () => {} }: Props) => {
           label="匿名で投稿する"
         />
         <Typography>
-          ※ 投稿者が非表示になります。<br />匿名の投稿は自分で削除できないので注意!!
+          ※ 投稿者が非表示になります。
+          <br />
+          匿名の投稿は自分で削除できないので注意!!
         </Typography>
       </Box>
 
-      <Box className={classes.box}>
-        <Button type="submit" data-submit-type={'post'} variant="contained" color="primary">
+      <Box className={classes.buttons}>
+        <Button type="button" onClick={handleCancel}>
+          キャンセルする
+        </Button>
+
+        <Button type="submit" variant="contained" color="primary">
           お題を投稿する
         </Button>
       </Box>
