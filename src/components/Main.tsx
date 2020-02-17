@@ -92,8 +92,7 @@ const Main = () => {
             <ThumbUpIcon /> でいいねを送れます。
           </Typography>
           <Typography variant="body1">
-            テーマの追加は右下の + ボタンか <kbd>⌘ + Return</kbd>{" "}
-            で表示される入力フォームから行ってください
+            右下の + ボタンか <kbd>⌘ + Return</kbd>で表示される入力フォームからトークテーマを投稿できます。
           </Typography>
         </Paper>
         <Grid container justify="center" spacing={3}>
