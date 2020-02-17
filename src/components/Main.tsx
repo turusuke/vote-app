@@ -1,7 +1,4 @@
-import React, {
-  FormEvent,
-  useState,
-} from "react";
+import React, { FormEvent, useState } from "react";
 import {
   useFirestore,
   useFirestoreConnect,
@@ -20,7 +17,7 @@ import {
   Button
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 
 import { RootState, Themes } from "../ducks/reducers";
@@ -28,6 +25,7 @@ import useKeyPress from "../hooks/useKeyPress";
 import { ThemeCard } from "./ThemeCard";
 import ConfirmDialog from "./ConfirmDialog";
 import Form from "./Form";
+import { compareLikesSize } from "../utils/compareLikesSize";
 
 const Main = () => {
   const classes = useStyles();
@@ -90,33 +88,40 @@ const Main = () => {
 
       <main>
         <Paper className={classes.headContent}>
-          <Typography variant="body1"><ThumbUpIcon /> でいいねを送れます。</Typography>
-          <Typography variant="body1">テーマの追加は右下の + ボタンか <kbd>⌘ + Return</kbd> で表示される入力フォームから行ってください</Typography>
+          <Typography variant="body1">
+            <ThumbUpIcon /> でいいねを送れます。
+          </Typography>
+          <Typography variant="body1">
+            テーマの追加は右下の + ボタンか <kbd>⌘ + Return</kbd>{" "}
+            で表示される入力フォームから行ってください
+          </Typography>
         </Paper>
         <Grid container justify="center" spacing={3}>
           <Grid container item xs={12} spacing={3}>
-            {themes.map(({ id, title, like, comment, user }: Themes) => {
-              const isLiked = like ? like.includes(auth.uid) : false;
-              return (
-                <Grid key={id} item sm={4} xs={12}>
-                  <ThemeCard
-                    title={title}
-                    likes={like ? like.length : 0}
-                    isLiked={isLiked}
-                    onLike={() =>
-                      onLike({ firestore, isLiked, id, uid: auth.uid })
-                    }
-                    onDelete={() => {
-                      setSelectItem(id);
-                      setOpenConfirmDialog(true);
-                    }}
-                    comment={comment}
-                    user={user}
-                    isMyTheme={user.uid === auth.uid}
-                  />
-                </Grid>
-              );
-            })}
+            {themes
+              .sort(compareLikesSize)
+              .map(({ id, title, like, comment, user }: Themes) => {
+                const isLiked = like ? like.includes(auth.uid) : false;
+                return (
+                  <Grid key={id} item sm={4} xs={12}>
+                    <ThemeCard
+                      title={title}
+                      likes={like ? like.length : 0}
+                      isLiked={isLiked}
+                      onLike={() =>
+                        onLike({ firestore, isLiked, id, uid: auth.uid })
+                      }
+                      onDelete={() => {
+                        setSelectItem(id);
+                        setOpenConfirmDialog(true);
+                      }}
+                      comment={comment}
+                      user={user}
+                      isMyTheme={user.uid === auth.uid}
+                    />
+                  </Grid>
+                );
+              })}
           </Grid>
         </Grid>
 
